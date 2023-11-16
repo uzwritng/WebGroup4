@@ -1,7 +1,7 @@
 const { MongoClient } = require("mongodb");
 
 //URL
-const connectionString = "mongodb+srv://admin:admin@cluster0.zbmbzrc.mongodb.net/?retryWrites=true&w=majority"
+const connectionString = "mongodb+srv://"
 const DBClient = new MongoClient(connectionString);
 
 //name of DB & Collection
