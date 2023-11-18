@@ -6,8 +6,8 @@ const client = new MongoClient(connectionString, {
   useUnifiedTopology: true,
 });
 
-const dbName = "library_database";
-const collName = "books";
+const dbName = "Library";
+const collName = "Shelter";
 
 let db;
 let booksCollection;

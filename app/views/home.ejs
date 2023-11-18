@@ -7,7 +7,15 @@
 
         <h2>Home</h2>
         
-        <!-- <p>database = <%= db %></p> -->
+        <!-- TEST -->
+        <% for (let i = 0; i < books.length; i++) { %>
+            <li>
+            <strong>Title:</strong> <%= books[i].title %><br>
+            <strong>Author:</strong> <%= books[i].author %><br>
+            <strong>Date:</strong> <%= books[i].date %><br>
+            <strong>Category:</strong> <%= books[i].Category %><br>
+            </li>
+        <% } %>
 
 
     </div>
