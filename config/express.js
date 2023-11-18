@@ -21,9 +21,10 @@ module.exports = function () {
     app.get('/', async function(req, res) {
       try {
         // Assuming getAllBookInfo() returns an array of books
-        const books = await getAllBookInfo();
+        const dbbooks = await getAllBookInfo();
+        console.log(dbbooks);
         // Pass the database name and books to the EJS template
-        res.render('home', { db: 'library_database', books: books });
+        res.render('home', {books: dbbooks });
       } catch (error) {
         // If there's an error, send an error response
         res.status(500).send(error.message);
@@ -32,8 +33,17 @@ module.exports = function () {
     
 
     // Edit route
-    app.get('/edit', function(req, res, next) {
-      res.render('edit');
+    app.get('/edit', async function(req, res, next) {
+      try {
+        const dbbooks = await getAllBookInfo();
+        console.log(dbbooks);
+        
+        res.render('edit', {books: dbbooks });
+      } 
+      catch (error) {
+        // If there's an error, send an error response
+        res.status(500).send(error.message);
+      }
     });
 
     // Add a new book
