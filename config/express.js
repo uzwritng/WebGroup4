@@ -1,6 +1,9 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var dbManager = require('./DBManager'); // Ensure this path is correct
+var dbManager = require('./DBManager'); 
+
+const { getAllBookInfo } = require('./DBManager'); 
+
 
 module.exports = function () {
     var app = express();
@@ -15,10 +18,18 @@ module.exports = function () {
     app.use(bodyParser.json());
 
     // Home route
-    app.get('/', async function(req, res, next) {
-      const books = await dbManager.getAllBookInfo();
-      res.render('home', { books: books });
+    app.get('/', async function(req, res) {
+      try {
+        // Assuming getAllBookInfo() returns an array of books
+        const books = await getAllBookInfo();
+        // Pass the database name and books to the EJS template
+        res.render('home', { db: 'library_database', books: books });
+      } catch (error) {
+        // If there's an error, send an error response
+        res.status(500).send(error.message);
+      }
     });
+    
 
     // Edit route
     app.get('/edit', function(req, res, next) {
