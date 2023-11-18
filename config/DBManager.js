@@ -1,49 +1,73 @@
 const { MongoClient } = require("mongodb");
 
-//URL
-const connectionString = "mongodb+srv://"
-const DBClient = new MongoClient(connectionString);
 
-//name of DB & Collection
-const dbName = "test_database";
-const collName="test_collection";
+const connectionString = process.env.MONGODB_CONNECTION_STRING;
+const client = new MongoClient(connectionString, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-let DBObject;
-async function ConnectDB()
-{
-    /*
-    DESC : connect to DB
-    output(boolean) = true(connected) / false(not connected)
-     */
+const dbName = "library_database";
+const collName = "books";
+
+let db;
+let booksCollection;
+
+// Connect to the database
+async function connectDB() {
+  try {
+    await client.connect();
+    db = client.db(dbName);
+    booksCollection = db.collection(collName);
+    console.log(`Connected to database: ${dbName}`);
+    return true;
+  } catch (error) {
+    console.error('Connection to MongoDB failed:', error);
+    return false;
+  }
 }
 
-
-
-async function GetAllBookInfo()
-{
-    /* 
-    output(list) = list of book info
-    */
+// Get all book info from the database
+async function getAllBookInfo() {
+  try {
+    return await booksCollection.find({}).toArray();
+  } catch (error) {
+    console.error('Error fetching books:', error);
+    return [];
+  }
 }
 
-async function AddBookInfo(book)
-{
-    /* 
-    output(boolean) = true(add success) or false(add failed)
-    */
+// Add a new book to the database
+async function addBookInfo(book) {
+  try {
+    const result = await booksCollection.insertOne(book);
+    return result.acknowledged;
+  } catch (error) {
+    console.error('Error adding book:', error);
+    return false;
+  }
 }
 
-async function RemoveBookInfo(title)
-{
-    /* 
-    output(boolean) = true(remove success) or false(remove failed)
-    */
+// Remove a book from the database by title
+async function removeBookInfo(title) {
+  try {
+    const result = await booksCollection.deleteOne({ title: title });
+    return result.deletedCount === 1;
+  } catch (error) {
+    console.error('Error removing book:', error);
+    return false;
+  }
 }
 
+// Close the database connection
+async function closeConnection() {
+  await client.close();
+}
 
 module.exports = {
-    ConnectDB,
-    GetAllBookInfo,
-    AddBookInfo,
-    RemoveBookInfo
-  };
+  connectDB,
+  getAllBookInfo,
+  addBookInfo,
+  removeBookInfo,
+  closeConnection,
+};
