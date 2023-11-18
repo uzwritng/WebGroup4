@@ -1,6 +1,5 @@
 const { MongoClient } = require("mongodb");
 
-
 const connectionString = process.env.MONGODB_CONNECTION_STRING;
 const client = new MongoClient(connectionString, {
   useNewUrlParser: true,
