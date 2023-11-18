@@ -1,7 +1,7 @@
 const { MongoClient } = require("mongodb");
 
 //URL
-const connectionString = "mongodb+srv://"
+
 const DBClient = new MongoClient(connectionString);
 
 //name of DB & Collection
